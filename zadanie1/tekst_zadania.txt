@@ -1,0 +1,26 @@
+3 inputy
+
+skup 4.2 zł
+
+sprzedaż 4.5zł
+
+kwota 100zł
+
+po submit ile kupie euro za 100 zł
+
+oraz ile euro dostane za 100 
+
+
+
+kw 1000   1040zł
+
+% 2% na rok   4%
+
+okres 2  = 24 miesiączne
+
+miesieczna rata wynosi 1040/24
+
+
+alternatywa, zamiast okres
+miesięczna rata = 100
+ile miesięcy = 11 miesięcy
