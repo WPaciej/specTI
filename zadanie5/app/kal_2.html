@@ -1,0 +1,82 @@
+{extends file="../templates/main.html"}
+
+{block name=footer} {/block}
+
+{block name=top}
+
+<div id="logo">
+    <h1><a href="./">Kalkulator</a></h1>
+    <h2><a href="./">kredytowy</a></h2>
+    <ul id="kontakt">
+      <li><a href="./">Kontakt</a></li>
+      <li class="last"><a href="./">Wyloguj</a></li>
+    </ul>
+    <ul id="menu">
+      <li><a href="./">Strona Główna</a></li>
+      <li><a href="./">Blog</a></li>
+      <li><a href="./">Galeria</a></li>
+      <li><a href="./">Linki</a></li>
+      <li class="last"><a href="./" >Kontakt</a></li>
+    </ul>
+  </div>
+
+{/block}
+
+{block name=content}
+
+<h2>Witaj na mojej stronie</h2>
+      <p>Tutaj policzysz koszt raty rocznej.</p>
+      <div class="hr"></div>      
+      
+      <form action="{$app_url}/app/kredyt_calc.php" method="post" >
+        <fieldset>
+          <p class="form">
+            <input type="text" name="kwota" placeholder="Kwota" value="{$form['kwota']}" /> <br>
+
+            <input type="text" name="oproc" placeholder="Oprocentowanie" value="{$form['oproc']}"> <br>            
+            
+            <input type="text" name="okres" placeholder="Okres (co rok)"  value="{$form['okres']}" /> <br>
+          </p>
+      
+          <p class="form_submit"><input type="submit" name="a4" id="a4" value="Oblicz"/></p>
+        </fieldset>
+      </form>      
+      <div class="hr"></div>
+
+      {* wyświeltenie listy błędów, jeśli istnieją *}
+{if isset($messages)}
+	{if count($messages) > 0} 
+		<h4>Wystąpiły błędy: </h4>
+		<ol class="err">
+		{foreach  $messages as $msg}
+		{strip}
+			<li>{$msg}</li>
+		{/strip}
+		{/foreach}
+		</ol>
+	{/if}
+{/if}
+
+{* wyświeltenie listy informacji, jeśli istnieją *}
+{if isset($infos)}
+	{if count($infos) > 0} 
+		<h4>Informacje: </h4>
+		<ol class="inf">
+		{foreach  $infos as $msg}
+		{strip}
+			<li>{$msg}</li>
+		{/strip}
+		{/foreach}
+		</ol>
+	{/if}
+{/if}
+
+{if isset($rata)}
+	<h4>Wynik</h4>
+	<p class="res">
+	{$rata}
+	</p>
+{/if}      
+   
+</div>
+{/block}
