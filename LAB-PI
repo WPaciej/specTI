@@ -73,3 +73,55 @@ t.speed(500)
 #t.goto(-100,-100)
 t.left(90)
 triangle(t, 50, 5)
+
+
+
+Na Labach
+
+from turtle import *
+
+left(90)
+
+#rysuje kwadrat o boku x
+def kwadrat(x):
+  for i in range(4):
+    forward(x)
+    right(90)
+    
+def trojkat(x):
+  for i in range(3):
+    forward(x)
+    right(120)
+  
+  
+def sierpinski(x, n):
+    if n == 0:
+      return
+    
+    for i in range(3):
+      sierpinski(x/2, n-1)
+      forward(x)
+      right(120)
+  
+  #wywołanie funkcji o boku 120
+  
+# drzewo fraktalne
+# o wysokośći h i stopniu skomplikowania n
+def tree(h,n):
+  if n == 1:
+    forward(h)
+    back(h)
+    return
+  
+  forward(h/3)
+  left(30)
+  tree(h/2, n-1)
+  right(60)
+  tree(h/2, n-1)
+  left(30)
+  back(h/3)
+  
+tree(120, 7)
+
+speed()
+
