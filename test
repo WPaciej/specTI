@@ -1,17 +1,50 @@
-#ifndef MACIERZ_H
-#define MACIERZ_H
+// Funkcja wyznaczajaca wymiary macierzy
+std::pair<int, int> wymiaryMacierzy(const Macierz& macierz) {
+    if (macierz.empty()) return {0, 0};
+    return {macierz.size(), macierz[0].size()};
+}
 
-#include <vector>
-#include <string>
-#include <tuple>
+// Funkcja obliczająca sumę wszystkich elementów macierzy
+int sumaElementow(const Macierz& macierz) {
+    int suma = 0;
+    for (const auto& wiersz : macierz) {
+        suma += std::accumulate(wiersz.begin(), wiersz.end(), 0);
+    }
+    return suma;
+}
 
-using Macierz = std::vector<std::vector<int>>;
+// Funkcja obliczająca średnią wartość wszystkich elementów
+double sredniaElementow(const Macierz& macierz) {
+    int liczbaElementow = 0;
+    int suma = sumaElementow(macierz);
+    for (const auto& wiersz : macierz) {
+        liczbaElementow += wiersz.size();
+    }
+    return static_cast<double>(suma) / liczbaElementow;
+}
 
-Macierz wczytajMacierz(const std::string& nazwaPliku);
-std::pair<int, int> wymiaryMacierzy(const Macierz& macierz);
-int sumaElementow(const Macierz& macierz);
-double sredniaElementow(const Macierz& macierz);
-int sumaPrzekatnej(const Macierz& macierz, bool glownaPrzekatna = true);
-bool czyMacierzZerowa(const Macierz& macierz);
+// Funkcja obliczająca sumę elementów na przekątnej (głównej lub bocznej)
+int sumaPrzekatnej(const Macierz& macierz, bool glownaPrzekatna) {
+    int suma = 0;
+    int rozmiar = std::min(macierz.size(), macierz[0].size());
+    for (int i = 0; i < rozmiar; ++i) {
+        if (glownaPrzekatna) {
+            suma += macierz[i][i];
+        } else {
+            suma += macierz[i][rozmiar - i - 1];
+        }
+    }
+    return suma;
+}
 
-#endif
+// Funkcja sprawdzająca, czy wszystkie elementy macierzy są zerowe
+bool czyMacierzZerowa(const Macierz& macierz) {
+    for (const auto& wiersz : macierz) {
+        for (int element : wiersz) {
+            if (element != 0) {
+                return false;
+            }
+        }
+    }
+    return true;
+}
