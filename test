@@ -1,13 +1,12 @@
 #include "macierz.h"
 #include <fstream>
 #include <iostream>
-#include <numeric>
+#include <stdexcept>
 
 Macierz wczytajMacierz(const std::string& nazwaPliku) {
     std::ifstream plik(nazwaPliku);
     if (!plik) {
-        std::cerr << "Nie mozna otworzyc pliku: " << nazwaPliku << std::endl;
-        return {}; // Zwróć pustą macierz w przypadku błędu
+        throw std::runtime_error("Nie mozna otworzyc pliku: " + nazwaPliku);
     }
 
     Macierz macierz;
@@ -27,4 +26,32 @@ Macierz wczytajMacierz(const std::string& nazwaPliku) {
     return macierz;
 }
 
-// Implementacje pozostałych funkcji są takie same jak poprzednio
+Macierz dodajMacierze(const Macierz& macierzA, const Macierz& macierzB) {
+    Macierz wynik;
+    if (macierzA.size() != macierzB.size() || macierzA[0].size() != macierzB[0].size()) {
+        throw std::invalid_argument("Macierze musza miec te same wymiary.");
+    }
+
+    for (size_t i = 0; i < macierzA.size(); ++i) {
+        std::vector<int> wiersz;
+        for (size_t j = 0; j < macierzA[i].size(); ++j) {
+            wiersz.push_back(macierzA[i][j] + macierzB[i][j]);
+        }
+        wynik.push_back(wiersz);
+    }
+    return wynik;
+}
+
+void zapiszMacierz(const Macierz& macierz, const std::string& nazwaPliku) {
+    std::ofstream plik(nazwaPliku);
+    if (!plik) {
+        throw std::runtime_error("Nie mozna otworzyc pliku do zapisu: " + nazwaPliku);
+    }
+
+    for (const auto& wiersz : macierz) {
+        for (const auto& element : wiersz) {
+            plik << element << ' ';
+        }
+        plik << '\n';
+    }
+}
