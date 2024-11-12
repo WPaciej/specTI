@@ -1,44 +1,17 @@
-#include <iostream>
-#include "macierz.h"
+#ifndef MACIERZ_H
+#define MACIERZ_H
 
-int main(int argc, char* argv[]) {
-    if (argc != 2) {
-        std::cerr << "Uzycie: program.exe MacierzA.txt" << std::endl;
-        return 1;
-    }
+#include <vector>
+#include <string>
+#include <tuple>
 
-    // Wczytywanie macierzy z pliku
-    Macierz macierz = wczytajMacierz(argv[1]);
+using Macierz = std::vector<std::vector<int>>;
 
-    // Sprawdzamy, czy macierz została poprawnie wczytana (czy jest niepusta)
-    if (macierz.empty()) {
-        std::cerr << "Blad: nie udalo sie wczytac macierzy z pliku " << argv[1] << std::endl;
-        return 1; // Zwrócenie kodu błędu
-    }
+Macierz wczytajMacierz(const std::string& nazwaPliku);
+std::pair<int, int> wymiaryMacierzy(const Macierz& macierz);
+int sumaElementow(const Macierz& macierz);
+double sredniaElementow(const Macierz& macierz);
+int sumaPrzekatnej(const Macierz& macierz, bool glownaPrzekatna = true);
+bool czyMacierzZerowa(const Macierz& macierz);
 
-    // Wypisanie wymiarow macierzy
-    auto wymiary = wymiaryMacierzy(macierz);
-    std::cout << "Wymiary macierzy: " << wymiary.first << " x " << wymiary.second << std::endl;
-
-    // Suma wszystkich elementow
-    int suma = sumaElementow(macierz);
-    std::cout << "Suma wszystkich elementow: " << suma << std::endl;
-
-    // Srednia wszystkich elementow
-    double srednia = sredniaElementow(macierz);
-    std::cout << "Srednia wartosc elementow: " << srednia << std::endl;
-
-    // Suma elementow na przekatnej glownej
-    int sumaPrzekatnejGlownej = sumaPrzekatnej(macierz, true);
-    std::cout << "Suma elementow na przekatnej glownej: " << sumaPrzekatnejGlownej << std::endl;
-
-    // Suma elementow na przekatnej bocznej
-    int sumaPrzekatnejBocznej = sumaPrzekatnej(macierz, false);
-    std::cout << "Suma elementow na przekatnej bocznej: " << sumaPrzekatnejBocznej << std::endl;
-
-    // Sprawdzenie czy macierz jest zerowa
-    bool jestZerowa = czyMacierzZerowa(macierz);
-    std::cout << "Czy macierz jest zerowa? " << (jestZerowa ? "Tak" : "Nie") << std::endl;
-    
-    return 0;
-}
+#endif
