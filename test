@@ -1,57 +1,44 @@
-#include "macierz.h"
-#include <fstream>
 #include <iostream>
-#include <stdexcept>
+#include "macierz.h"
 
-Macierz wczytajMacierz(const std::string& nazwaPliku) {
-    std::ifstream plik(nazwaPliku);
-    if (!plik) {
-        throw std::runtime_error("Nie mozna otworzyc pliku: " + nazwaPliku);
+int main(int argc, char* argv[]) {
+    if (argc != 2) {
+        std::cerr << "Uzycie: program.exe MacierzA.txt" << std::endl;
+        return 1;
     }
 
-    Macierz macierz;
-    int liczba;
+    // Wczytywanie macierzy z pliku
+    Macierz macierz = wczytajMacierz(argv[1]);
 
-    while (plik) {
-        std::vector<int> wiersz;
-        while (plik >> liczba) {
-            wiersz.push_back(liczba);
-            if (plik.peek() == '\n' || plik.peek() == EOF) break;
-        }
-        if (!wiersz.empty()) {
-            macierz.push_back(wiersz);
-        }
+    // Sprawdzamy, czy macierz została poprawnie wczytana (czy jest niepusta)
+    if (macierz.empty()) {
+        std::cerr << "Blad: nie udalo sie wczytac macierzy z pliku " << argv[1] << std::endl;
+        return 1; // Zwrócenie kodu błędu
     }
 
-    return macierz;
-}
+    // Wypisanie wymiarow macierzy
+    auto wymiary = wymiaryMacierzy(macierz);
+    std::cout << "Wymiary macierzy: " << wymiary.first << " x " << wymiary.second << std::endl;
 
-Macierz dodajMacierze(const Macierz& macierzA, const Macierz& macierzB) {
-    Macierz wynik;
-    if (macierzA.size() != macierzB.size() || macierzA[0].size() != macierzB[0].size()) {
-        throw std::invalid_argument("Macierze musza miec te same wymiary.");
-    }
+    // Suma wszystkich elementow
+    int suma = sumaElementow(macierz);
+    std::cout << "Suma wszystkich elementow: " << suma << std::endl;
 
-    for (size_t i = 0; i < macierzA.size(); ++i) {
-        std::vector<int> wiersz;
-        for (size_t j = 0; j < macierzA[i].size(); ++j) {
-            wiersz.push_back(macierzA[i][j] + macierzB[i][j]);
-        }
-        wynik.push_back(wiersz);
-    }
-    return wynik;
-}
+    // Srednia wszystkich elementow
+    double srednia = sredniaElementow(macierz);
+    std::cout << "Srednia wartosc elementow: " << srednia << std::endl;
 
-void zapiszMacierz(const Macierz& macierz, const std::string& nazwaPliku) {
-    std::ofstream plik(nazwaPliku);
-    if (!plik) {
-        throw std::runtime_error("Nie mozna otworzyc pliku do zapisu: " + nazwaPliku);
-    }
+    // Suma elementow na przekatnej glownej
+    int sumaPrzekatnejGlownej = sumaPrzekatnej(macierz, true);
+    std::cout << "Suma elementow na przekatnej glownej: " << sumaPrzekatnejGlownej << std::endl;
 
-    for (const auto& wiersz : macierz) {
-        for (const auto& element : wiersz) {
-            plik << element << ' ';
-        }
-        plik << '\n';
-    }
+    // Suma elementow na przekatnej bocznej
+    int sumaPrzekatnejBocznej = sumaPrzekatnej(macierz, false);
+    std::cout << "Suma elementow na przekatnej bocznej: " << sumaPrzekatnejBocznej << std::endl;
+
+    // Sprawdzenie czy macierz jest zerowa
+    bool jestZerowa = czyMacierzZerowa(macierz);
+    std::cout << "Czy macierz jest zerowa? " << (jestZerowa ? "Tak" : "Nie") << std::endl;
+    
+    return 0;
 }
