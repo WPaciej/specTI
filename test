@@ -1,57 +1,35 @@
-#include "macierz.h"
-#include <fstream>
 #include <iostream>
-#include <stdexcept>
+#include "macierz.h"
 
-Macierz wczytajMacierz(const std::string& nazwaPliku) {
-    std::ifstream plik(nazwaPliku);
-    if (!plik) {
-        throw std::runtime_error("Nie mozna otworzyc pliku: " + nazwaPliku);
+int main(int argc, char* argv[]) {
+    // Wyswietlanie wszystkich argumentow wywolania
+    std::cout << "Argumenty wywolania:" << std::endl;
+    for (int i = 0; i < argc; ++i) {
+        std::cout << "Argument " << i << ": " << argv[i] << std::endl;
     }
 
-    Macierz macierz;
-    int liczba;
-
-    while (plik) {
-        std::vector<int> wiersz;
-        while (plik >> liczba) {
-            wiersz.push_back(liczba);
-            if (plik.peek() == '\n' || plik.peek() == EOF) break;
-        }
-        if (!wiersz.empty()) {
-            macierz.push_back(wiersz);
-        }
+    // Sprawdzenie poprawnosci liczby argumentow
+    if (argc != 4) {
+        std::cerr << "Uzycie: program.exe MacierzA.txt MacierzB.txt wyniki.txt" << std::endl;
+        return 1;
     }
 
-    return macierz;
-}
+    try {
+        // Wczytywanie macierzy z plikow
+        Macierz macierzA = wczytajMacierz(argv[1]);
+        Macierz macierzB = wczytajMacierz(argv[2]);
 
-Macierz dodajMacierze(const Macierz& macierzA, const Macierz& macierzB) {
-    Macierz wynik;
-    if (macierzA.size() != macierzB.size() || macierzA[0].size() != macierzB[0].size()) {
-        throw std::invalid_argument("Macierze musza miec te same wymiary.");
+        // Dodawanie macierzy
+        Macierz wynik = dodajMacierze(macierzA, macierzB);
+
+        // Zapis wyniku do pliku
+        zapiszMacierz(wynik, argv[3]);
+
+        std::cout << "Wynik zapisany do pliku: " << argv[3] << std::endl;
+    } catch (const std::exception& e) {
+        std::cerr << "Blad: " << e.what() << std::endl;
+        return 1;
     }
 
-    for (size_t i = 0; i < macierzA.size(); ++i) {
-        std::vector<int> wiersz;
-        for (size_t j = 0; j < macierzA[i].size(); ++j) {
-            wiersz.push_back(macierzA[i][j] + macierzB[i][j]);
-        }
-        wynik.push_back(wiersz);
-    }
-    return wynik;
-}
-
-void zapiszMacierz(const Macierz& macierz, const std::string& nazwaPliku) {
-    std::ofstream plik(nazwaPliku);
-    if (!plik) {
-        throw std::runtime_error("Nie mozna otworzyc pliku do zapisu: " + nazwaPliku);
-    }
-
-    for (const auto& wiersz : macierz) {
-        for (const auto& element : wiersz) {
-            plik << element << ' ';
-        }
-        plik << '\n';
-    }
+    return 0;
 }
