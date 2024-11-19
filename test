@@ -35,33 +35,47 @@ int main(int argc, char* argv[]) {
             std::string nazwisko, imie, dataUrodzenia;
             strStream >> nazwisko >> imie >> dataUrodzenia;
 
-            // Odczytanie trzeciej linii (numer przedmiotu, nazwa przedmiotu, oceny)
-            if (getline(plik, linia)) {
+            // Wyświetlenie podstawowych danych studenta
+            std::cout << "Numer albumu: " << numerAlbumu << std::endl;
+            std::cout << "Nazwisko: " << nazwisko << ", Imie: " << imie << ", Data urodzenia: " << dataUrodzenia << std::endl;
+
+            // Zmienna do przechowywania przedmiotów i ocen
+            std::array<std::array<double, 5>, 3> przedmioty; // Zakładając 3 przedmioty i maksymalnie 5 ocen na przedmiot
+            int przedmiotIndex = 0;
+
+            // Odczytanie przedmiotów i ocen
+            while (getline(plik, linia) && !linia.empty() && przedmiotIndex < 3) {
                 std::istringstream przedmiotStream(linia);
                 int numerPrzedmiotu;
                 std::string nazwaPrzedmiotu;
-                std::array<int, 5> oceny = {0};  // Załóżmy, że student ma max 5 ocen
+                std::array<double, 5> oceny = {0}; // Maksymalnie 5 ocen na przedmiot
+                int ocenyIndex = 0;
 
                 // Parsowanie numeru przedmiotu i nazwy przedmiotu
                 przedmiotStream >> numerPrzedmiotu;
-                przedmiotStream >> nazwaPrzedmiotu;
+                std::getline(przedmiotStream, nazwaPrzedmiotu); // Zczytanie nazwy przedmiotu
+                nazwaPrzedmiotu.erase(0, 1); // Usunięcie początkowej spacji
 
-                // Odczytanie ocen
-                int i = 0;
-                while (przedmiotStream >> oceny[i] && i < 5) {
-                    i++;
+                // Odczyt ocen
+                double ocena;
+                while (przedmiotStream >> ocena && ocenyIndex < 5) {
+                    oceny[ocenyIndex] = ocena;
+                    ocenyIndex++;
                 }
 
-                // Wyświetlenie danych studenta
-                std::cout << "Numer albumu: " << numerAlbumu << std::endl;
-                std::cout << "Nazwisko: " << nazwisko << ", Imie: " << imie << ", Data urodzenia: " << dataUrodzenia << std::endl;
-                std::cout << "Numer przedmiotu: " << numerPrzedmiotu << ", Nazwa przedmiotu: " << nazwaPrzedmiotu << std::endl;
-                std::cout << "Oceny: ";
-                for (int ocena : oceny) {
-                    std::cout << ocena << " ";
+                // Przechowywanie ocen w tablicy
+                przedmioty[przedmiotIndex] = oceny;
+                przedmiotIndex++;
+
+                // Wyświetlanie przedmiotu i ocen
+                std::cout << "Przedmiot: " << nazwaPrzedmiotu << ", Oceny: ";
+                for (int i = 0; i < ocenyIndex; i++) {
+                    std::cout << przedmioty[przedmiotIndex - 1][i] << " ";
                 }
-                std::cout << std::endl << std::endl;
+                std::cout << std::endl;
             }
+
+            std::cout << std::endl;
         }
     }
 
