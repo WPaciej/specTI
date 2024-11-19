@@ -1,6 +1,8 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <array>
+#include <sstream>
 
 int main(int argc, char* argv[]) {
     // Sprawdzenie, czy przekazano nazwę pliku jako argument
@@ -21,12 +23,46 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
-    // Zmienna do przechowywania wierszy pliku
     std::string linia;
 
-    // Odczyt i wyswietlanie zawartosci pliku
+    // Odczyt danych studenta
     while (getline(plik, linia)) {
-        std::cout << linia << std::endl;
+        std::string numerAlbumu = linia;  // Pierwsza linia to numer albumu
+
+        // Odczytanie drugiej linii (nazwisko, imie, data urodzenia)
+        if (getline(plik, linia)) {
+            std::istringstream strStream(linia);
+            std::string nazwisko, imie, dataUrodzenia;
+            strStream >> nazwisko >> imie >> dataUrodzenia;
+
+            // Odczytanie trzeciej linii (numer przedmiotu, nazwa przedmiotu, oceny)
+            if (getline(plik, linia)) {
+                std::istringstream przedmiotStream(linia);
+                int numerPrzedmiotu;
+                std::string nazwaPrzedmiotu;
+                std::array<int, 5> oceny = {0};  // Załóżmy, że student ma max 5 ocen
+
+                // Parsowanie numeru przedmiotu i nazwy przedmiotu
+                przedmiotStream >> numerPrzedmiotu;
+                przedmiotStream >> nazwaPrzedmiotu;
+
+                // Odczytanie ocen
+                int i = 0;
+                while (przedmiotStream >> oceny[i] && i < 5) {
+                    i++;
+                }
+
+                // Wyświetlenie danych studenta
+                std::cout << "Numer albumu: " << numerAlbumu << std::endl;
+                std::cout << "Nazwisko: " << nazwisko << ", Imie: " << imie << ", Data urodzenia: " << dataUrodzenia << std::endl;
+                std::cout << "Numer przedmiotu: " << numerPrzedmiotu << ", Nazwa przedmiotu: " << nazwaPrzedmiotu << std::endl;
+                std::cout << "Oceny: ";
+                for (int ocena : oceny) {
+                    std::cout << ocena << " ";
+                }
+                std::cout << std::endl << std::endl;
+            }
+        }
     }
 
     // Zamknięcie pliku
