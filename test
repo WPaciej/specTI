@@ -1,50 +1,36 @@
-// Funkcja wyznaczajaca wymiary macierzy
-std::pair<int, int> wymiaryMacierzy(const Macierz& macierz) {
-    if (macierz.empty()) return {0, 0};
-    return {macierz.size(), macierz[0].size()};
-}
+#include <iostream>
+#include <fstream>
+#include <string>
 
-// Funkcja obliczająca sumę wszystkich elementów macierzy
-int sumaElementow(const Macierz& macierz) {
-    int suma = 0;
-    for (const auto& wiersz : macierz) {
-        suma += std::accumulate(wiersz.begin(), wiersz.end(), 0);
+int main(int argc, char* argv[]) {
+    // Sprawdzenie, czy przekazano nazwę pliku jako argument
+    if (argc < 2) {
+        std::cout << "Brak argumentu z nazwa pliku." << std::endl;
+        return 1;
     }
-    return suma;
-}
 
-// Funkcja obliczająca średnią wartość wszystkich elementów
-double sredniaElementow(const Macierz& macierz) {
-    int liczbaElementow = 0;
-    int suma = sumaElementow(macierz);
-    for (const auto& wiersz : macierz) {
-        liczbaElementow += wiersz.size();
-    }
-    return static_cast<double>(suma) / liczbaElementow;
-}
+    // Nazwa pliku przekazana jako argument
+    std::string nazwaPliku = argv[1];
 
-// Funkcja obliczająca sumę elementów na przekątnej (głównej lub bocznej)
-int sumaPrzekatnej(const Macierz& macierz, bool glownaPrzekatna) {
-    int suma = 0;
-    int rozmiar = std::min(macierz.size(), macierz[0].size());
-    for (int i = 0; i < rozmiar; ++i) {
-        if (glownaPrzekatna) {
-            suma += macierz[i][i];
-        } else {
-            suma += macierz[i][rozmiar - i - 1];
-        }
-    }
-    return suma;
-}
+    // Otwarcie pliku
+    std::ifstream plik(nazwaPliku);
 
-// Funkcja sprawdzająca, czy wszystkie elementy macierzy są zerowe
-bool czyMacierzZerowa(const Macierz& macierz) {
-    for (const auto& wiersz : macierz) {
-        for (int element : wiersz) {
-            if (element != 0) {
-                return false;
-            }
-        }
+    // Sprawdzenie, czy plik został otwarty
+    if (!plik.is_open()) {
+        std::cout << "Nie udalo sie otworzyc pliku: " << nazwaPliku << std::endl;
+        return 1;
     }
-    return true;
+
+    // Zmienna do przechowywania wierszy pliku
+    std::string linia;
+
+    // Odczyt i wyswietlanie zawartosci pliku
+    while (getline(plik, linia)) {
+        std::cout << linia << std::endl;
+    }
+
+    // Zamknięcie pliku
+    plik.close();
+
+    return 0;
 }
