@@ -11,6 +11,13 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
+int main(int argc, char* argv[]) {
+    if (argc < 2) {
+        std::cout << "Brak argumentu z nazwa pliku." << std::endl;
+        return 1;
+    }
+
+
     // Nazwa pliku przekazana jako argument
     std::string nazwaPliku = argv[1];
 
