@@ -1,24 +1,43 @@
 #include <iostream>
 #include <cstring> // Potrzebne dla funkcji związanych z łańcuchami znaków
 
+// Deklaracja struktury wydarzenie
 struct Wydarzenie {
     int godzina;           // Godzina wydarzenia (np. 0 - 23)
     int minuty;            // Minuty wydarzenia (np. 0 - 59)
-    char nazwa[40];        // Nazwa wydarzenia, maksymalnie 39 znaków + 1 na znak końca '\0'
+    char nazwa[40];        // Nazwa wydarzenia, maksymalnie 39 znaków + 1 na '\0'
 };
 
+// Funkcja dodająca nazwę do struktury
+void wydarzenie_dodaj_nazwe(Wydarzenie* _wydarzenie, const char* _nazwa) {
+    // Funkcja strncpy zapewnia bezpieczeństwo, kopiując maksymalnie 39 znaków
+    std::strncpy(_wydarzenie->nazwa, _nazwa, 39);
+    _wydarzenie->nazwa[39] = '\0'; // Dodanie znaku końca łańcucha
+}
+
+// Funkcja dodająca czas do struktury
+void wydarzenie_dodaj_czas(Wydarzenie* _wydarzenie, int _godzina, int _minuty) {
+    _wydarzenie->godzina = _godzina;
+    _wydarzenie->minuty = _minuty;
+}
+
+// Funkcja wyświetlająca zawartość struktury
+void wydarzenie_wyswietl(const Wydarzenie* _wydarzenie) {
+    std::cout << "Godzina: " << _wydarzenie->godzina << ":" 
+              << (_wydarzenie->minuty < 10 ? "0" : "") << _wydarzenie->minuty << "\n";
+    std::cout << "Nazwa: " << _wydarzenie->nazwa << "\n";
+}
+
 int main() {
-    Wydarzenie event; // Deklaracja zmiennej typu Wydarzenie
+    // Deklaracja zmiennej lokalnej typu Wydarzenie
+    Wydarzenie mojeWydarzenie;
 
-    // Przykładowe przypisanie wartości do pól
-    event.godzina = 14;
-    event.minuty = 30;
-    std::strcpy(event.nazwa, "Spotkanie z przyjacielem"); // Kopiowanie ciągu znaków
+    // Testowanie funkcji
+    wydarzenie_dodaj_nazwe(&mojeWydarzenie, "Spotkanie biznesowe");
+    wydarzenie_dodaj_czas(&mojeWydarzenie, 10, 45);
 
-    // Wyświetlanie zawartości struktury
-    std::cout << "Godzina: " << event.godzina << ":" 
-              << (event.minuty < 10 ? "0" : "") << event.minuty << "\n";
-    std::cout << "Nazwa: " << event.nazwa << "\n";
+    std::cout << "Szczegóły wydarzenia:\n";
+    wydarzenie_wyswietl(&mojeWydarzenie);
 
     return 0;
 }
