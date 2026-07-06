@@ -78,6 +78,8 @@ triangle(t, 50, 5)
 
 Na Labach
 
+działa na  https://trinket.io/turtle
+
 from turtle import *
 
 left(90)
@@ -124,4 +126,27 @@ def tree(h,n):
 tree(120, 7)
 
 speed()
+
+
+działa na  https://trinket.io/turtle
+
+import turtle
+
+def tree(h,n):
+  if n == 1:
+    turtle.forward(h)
+    turtle.back(h)
+    return
+  
+  turtle.forward(h/3)
+  turtle.left(30)
+  tree(h/2, n-1)
+  turtle.right(60)
+  tree(h/2, n-1)
+  turtle.left(30)
+  turtle.back(h/3)
+  
+tree(120, 7)
+
+turtle.speed(0)
 
